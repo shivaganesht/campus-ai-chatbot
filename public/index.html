@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus AI Chatbot</title>
+    <title>CampusAI - Intelligent Student Assistant</title>
     <style>
         * {
             margin: 0;
@@ -12,12 +12,181 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+            position: relative;
+        .chat-container {
+            width: 90%;
+            max-width: 1000px;
+            height: 85vh;
+            max-height: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 1px rgba(255,255,255,0.1) inset;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .login-container {
+            padding: 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        
+        .login-container h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .login-container p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .login-form input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .login-form button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .login-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .sample-ids {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .sample-ids strong {
+            color: #333;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .student-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .student-info-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .student-details h3 {
+            font-size: 15px;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .student-details p {
+            font-size: 12px;
+            margin: 2px 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }   right: -200px;
+            animation: float 20s infinite;
+        }
+        
+        body::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(118, 75, 162, 0.1) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            animation: float 15s infinite reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
         }
         
         .chat-container {
@@ -35,44 +204,132 @@
         .chat-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chat-header::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            top: -50%;
+            left: -50%;
+            animation: rotate 30s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .chat-header-content {
+            position: relative;
+            z-index: 1;
         }
         
         .chat-header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .ai-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
         
         .chat-header p {
             font-size: 14px;
-            opacity: 0.9;
+            opacity: 0.95;
+            line-height: 1.5;
         }
         
         .chat-messages {
             flex: 1;
-            padding: 20px;
+            padding: 25px;
             overflow-y: auto;
-            background: #f5f5f5;
-        }
-        
+            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+            scrollbar-width: thin;
+            scrollbar-color: #667eea #f0f0f0;
         .message {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
-            animation: fadeIn 0.3s;
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            align-items: flex-start;
+            gap: 10px;
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         .message.user {
             justify-content: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .message.bot .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
         
         .message-content {
             max-width: 70%;
+            padding: 14px 18px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            line-height: 1.6;
+            font-size: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        
+        .message.bot .message-content {
+            background: white;
+            color: #2c3e50;
+            border: 1px solid #e8ecf0;
+            border-radius: 18px 18px 18px 4px;
+        }
+        
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 18px 18px 4px 18px;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 4px;
+            display: block;
+        }   max-width: 70%;
             padding: 12px 16px;
             border-radius: 18px;
             word-wrap: break-word;
@@ -170,42 +427,139 @@
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h1>🎓 Campus AI Assistant</h1>
-            <p>Ask me about fees, exams, hostels, library & more!</p>
-        </div>
-        
-        <div class="chat-messages" id="chatMessages">
-            <div class="message bot">
-                <div class="message-content">
-                    👋 Hello! I'm your campus assistant. How can I help you today?
+    <div class="chat-container" id="chatContainer">
+        <!-- Login Screen -->
+        <div class="login-container" id="loginContainer">
+            <div class="login-form">
+                <h1>🎓 CampusAI</h1>
+                <p>Welcome! Enter your Student ID to start</p>
+                <input 
+                    type="text" 
+                    id="studentIdInput" 
+                    placeholder="Enter Student ID (e.g., STU001)"
+                    autocomplete="off"
+                >
+                <button onclick="loginStudent()">Start Chat</button>
+                
+                <div class="sample-ids">
+                    <strong>📝 Sample IDs to try:</strong>
+                    STU001, STU002, STU003, STU004, STU005, STU006, STU007, STU008, STU009, STU010
+                    <br><br>
+                    <a href="/admin.html" style="color: #667eea; text-decoration: none; font-weight: 600;">
+                        🔐 Admin Panel →
+                    </a>
                 </div>
             </div>
         </div>
         
-        <div class="chat-input-area">
-            <input 
-                type="text" 
-                id="messageInput" 
-                placeholder="Type your question here..."
-                autocomplete="off"
-            >
-            <button id="sendButton">Send</button>
+        <!-- Chat Screen (Hidden initially) -->
+        <div id="chatScreen" style="display: none; height: 100%; display: flex; flex-direction: column;">
+            <!-- Student Info Bar -->
+            <div class="student-info" id="studentInfo">
+                <div class="student-info-left">
+                    <div class="student-avatar" id="studentAvatar">?</div>
+                    <div class="student-details">
+                        <h3 id="studentName">Loading...</h3>
+                        <p id="studentDept">...</p>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            
+            <div class="chat-header">
+                <div class="chat-header-content">
+                    <h1>
+                        <span>🤖 CampusAI</span>
+                        <span class="ai-badge">AI-POWERED</span>
+                    </h1>
+                    <p>Your intelligent assistant for fees, exams, hostels, library & campus info</p>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages"></div>
+            
+            <div class="chat-input-area">
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    placeholder="Ask me anything about campus..."
+                    autocomplete="off"
+                >
+                <button id="sendButton">
+                    <span>Send</span> 🚀
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
+        let currentStudent = null;
+        let chatHistory = [];
         const chatMessages = document.getElementById('chatMessages');
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
-        
         let typingIndicator = null;
+        
+        // Login functionality
+        async function loginStudent() {
+            const studentId = document.getElementById('studentIdInput').value.trim().toUpperCase();
+            if (!studentId) {
+                alert('Please enter a Student ID');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/student/${studentId}`);
+                if (response.ok) {
+                    currentStudent = await response.json();
+                    showChatScreen();
+                } else {
+                    alert('Student ID not found. Try: STU001, STU002, etc.');
+                }
+            } catch (error) {
+                alert('Error connecting to server');
+            }
+        }
+        
+        function showChatScreen() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('chatScreen').style.display = 'flex';
+            
+            // Update student info
+            const initials = currentStudent.name.split(' ').map(n => n[0]).join('');
+            document.getElementById('studentAvatar').textContent = initials;
+            document.getElementById('studentName').textContent = currentStudent.name;
+            document.getElementById('studentDept').textContent = `${currentStudent.department} • ${currentStudent.year}`;
+            
+            // Add welcome message
+            addMessage(`👋 Hello ${currentStudent.name.split(' ')[0]}! I'm CampusAI, your intelligent assistant. I have access to your complete profile and can help you with:
+
+📚 Academic information & exam schedules
+💰 Fee details & payment status  
+🏠 Hostel information & policies
+📖 Library services & book availability
+📊 Your attendance & CGPA tracking
+📞 Campus contact information
+
+Feel free to ask me anything!`, false);
+            
+            messageInput.focus();
+        }
+        
+        function logout() {
+            currentStudent = null;
+            chatHistory = [];
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('chatScreen').style.display = 'none';
+            document.getElementById('studentIdInput').value = '';
+            chatMessages.innerHTML = '';
+        }
         
         function createTypingIndicator() {
             const div = document.createElement('div');
             div.className = 'message bot';
             div.innerHTML = `
+                <div class="message-avatar">🤖</div>
                 <div class="typing-indicator active">
                     <div class="typing-dots">
                         <span></span>
@@ -217,12 +571,40 @@
             return div;
         }
         
+        function formatTime() {
+            return new Date().toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+        }
+        
         function addMessage(content, isUser) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
-            messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
+            
+            const avatar = isUser ? 
+                `<div class="message-avatar">${currentStudent.name.split(' ').map(n => n[0]).join('')}</div>` :
+                `<div class="message-avatar">🤖</div>`;
+            
+            const formattedContent = content.replace(/\n/g, '<br>');
+            
+            messageDiv.innerHTML = `
+                ${avatar}
+                <div class="message-content">
+                    ${formattedContent}
+                    <span class="message-time">${formatTime()}</span>
+                </div>
+            `;
+            
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Add to history
+            chatHistory.push({
+                type: isUser ? 'user' : 'bot',
+                content: content,
+                timestamp: new Date().toISOString()
+            });
         }
         
         async function sendMessage() {
@@ -243,7 +625,11 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ message })
+                    body: JSON.stringify({ 
+                        message,
+                        studentId: currentStudent.id,
+                        history: chatHistory.slice(-10) // Last 10 messages
+                    })
                 });
                 
                 const data = await response.json();
@@ -255,13 +641,13 @@
                 if (response.ok) {
                     addMessage(data.response, false);
                 } else {
-                    addMessage('Sorry, I encountered an error. Please try again.', false);
+                    addMessage('⚠️ Sorry, I encountered an error. Please try again.', false);
                 }
             } catch (error) {
                 if (typingIndicator) {
                     typingIndicator.remove();
                 }
-                addMessage('Sorry, I could not connect to the server.', false);
+                addMessage('⚠️ Sorry, I could not connect to the server.', false);
             }
             
             sendButton.disabled = false;
@@ -275,7 +661,11 @@
             }
         });
         
-        messageInput.focus();
+        document.getElementById('studentIdInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loginStudent();
+            }
+        });
     </script>
 </body>
 </html>
