@@ -1,0 +1,61 @@
+# Campus AI Chatbot - Dependencies
+# Python 3.9+ required
+
+# ========== WEB FRAMEWORK ==========
+flask==3.0.0
+flask-cors==4.0.0
+flask-socketio==5.3.6
+python-socketio==5.10.0
+python-dotenv==1.0.0
+requests==2.31.0
+
+# ========== FREE LLM OPTIONS ==========
+# Ollama (100% FREE - Local)
+ollama==0.1.6
+
+# Hugging Face (FREE with rate limits)
+transformers==4.36.0
+huggingface-hub==0.19.4
+
+# LangChain for orchestration
+langchain==0.1.0
+langchain-community==0.0.10
+
+# ========== IBM GRANITE (PAID - OPTIONAL) ==========
+# Uncomment if using IBM Granite
+# ibm-watsonx-ai==0.2.6
+# ibm-watson==8.0.0
+# ibm-cloud-sdk-core==3.18.0
+
+# ========== PDF PROCESSING ==========
+PyPDF2==3.0.1
+pdfplumber==0.10.3
+pypdf==3.17.4
+
+# ========== VECTOR DATABASE (FREE) ==========
+chromadb==0.4.18
+sentence-transformers==2.2.2
+
+# ========== NLP & TEXT PROCESSING ==========
+nltk==3.8.1
+spacy==3.7.2
+
+# ========== DATA HANDLING ==========
+pandas==2.1.4
+numpy==1.26.2
+python-dotenv==1.0.0
+
+# ========== UTILITIES ==========
+requests==2.31.0
+python-dateutil==2.8.2
+pyyaml==6.0.1
+Pillow==10.1.0
+
+# ========== ASYNC SUPPORT ==========
+eventlet==0.34.2
+
+# ========== OPTIONAL: Voice Support ==========
+# Uncomment if you want voice features
+# SpeechRecognition==3.10.0
+# pyttsx3==2.90
+# gTTS==2.4.0

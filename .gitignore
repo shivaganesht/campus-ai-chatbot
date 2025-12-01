@@ -1,0 +1,77 @@
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Environment variables (NEVER commit API keys!)
+.env
+.env.local
+.env.production
+.env.development
+
+# Vercel
+.vercel
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# ChromaDB data
+data/chroma_db/
+
+# Uploaded documents (optional - remove if you want to track them)
+documents/*.pdf
+
+# Custom assets (optional - remove if you want to track them)
+assets/*.png
+assets/*.jpg
+assets/*.jpeg
+assets/*.ico
+assets/*.svg
+!assets/README.txt
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Flask
+instance/
+.webassets-cache
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Distribution
+dist/
+build/
+*.egg-info/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Temporary files
+tmp/
+temp/
+*.tmp

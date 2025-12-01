@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config.campus_info.name }} - AI Campus Assistant</title>
+    <link rel="icon" href="{{ url_for('serve_assets', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Configuration Data -->
+    <script id="config-data" type="application/json">{{ config | tojson }}</script>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="header-left">
+                <img src="{{ url_for('serve_assets', filename='logo.png') }}" 
+                     alt="Campus Logo" 
+                     class="campus-logo"
+                     onerror="this.style.display='none'">
+                <div class="header-text">
+                    <h1 class="campus-name">{{ config.campus_info.name }}</h1>
+                    <p class="campus-tagline">{{ config.campus_info.tagline }}</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="/admin" class="admin-link">⚙️ Admin Panel</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="chat-layout">
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="sidebar-section">
+                        <h3>🚀 Quick Actions</h3>
+                        <div class="quick-actions" id="quick-actions">
+                            <button class="action-btn" data-query="What is the fee structure?">
+                                💰 Fee Structure
+                            </button>
+                            <button class="action-btn" data-query="When are the exams?">
+                                📝 Exam Schedule
+                            </button>
+                            <button class="action-btn" data-query="What are the hostel rules?">
+                                🏠 Hostel Rules
+                            </button>
+                            <button class="action-btn" data-query="Tell me about library services">
+                                📚 Library Info
+                            </button>
+                            <button class="action-btn" data-query="How to contact administration?">
+                                📞 Contact Admin
+                            </button>
+                            <button class="action-btn" data-query="Show academic calendar">
+                                📅 Calendar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>🔗 Quick Links</h3>
+                        <div class="quick-links">
+                            {% for link in config.quick_links %}
+                            <a href="{{ link.url }}" target="_blank" class="quick-link">
+                                <span class="link-icon">{{ link.icon }}</span>
+                                <span class="link-text">{{ link.title }}</span>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>📞 Contact Departments</h3>
+                        <div class="departments">
+                            {% for dept_key, dept in config.departments.items() %}
+                            <div class="department-card">
+                                <strong>{{ dept.name }}</strong>
+                                <p>📧 {{ dept.contact }}</p>
+                                <p>📞 {{ dept.phone }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Chat Container -->
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="bot-info">
+                            <img src="{{ url_for('serve_assets', filename='bot_avatar.png') }}" 
+                                 alt="Bot Avatar" 
+                                 class="bot-avatar"
+                                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%233b82f6%22/><text x=%2250%22 y=%2260%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22>🤖</text></svg>'">
+                            <div>
+                                <h2 class="bot-name">{{ config.chatbot_settings.bot_name }}</h2>
+                                <p class="bot-status">
+                                    <span class="status-dot"></span> Online & Ready
+                                </p>
+                            </div>
+                        </div>
+                        <button class="clear-chat-btn" id="clear-chat" title="Clear conversation">
+                            🗑️ Clear Chat
+                        </button>
+                    </div>
+
+                    <!-- Messages Area -->
+                    <div class="messages-container" id="messages-container">
+                        <div class="message bot-message welcome-message">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-content">
+                                <div class="message-text">{{ config.chatbot_settings.welcome_message | safe }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Typing Indicator -->
+                    <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                        <div class="message-avatar">🤖</div>
+                        <div class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <textarea 
+                                id="message-input" 
+                                placeholder="Type your question here..." 
+                                rows="1"
+                                maxlength="500"></textarea>
+                            <div class="input-actions">
+                                <span class="char-count" id="char-count">0/500</span>
+                                <button class="send-btn" id="send-btn" title="Send message">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 {{ config.campus_info.name }}. All rights reserved.</p>
+            <div class="social-links">
+                {% if config.social_media.facebook %}
+                <a href="{{ config.social_media.facebook }}" target="_blank">Facebook</a>
+                {% endif %}
+                {% if config.social_media.twitter %}
+                <a href="{{ config.social_media.twitter }}" target="_blank">Twitter</a>
+                {% endif %}
+                {% if config.social_media.instagram %}
+                <a href="{{ config.social_media.instagram }}" target="_blank">Instagram</a>
+                {% endif %}
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>

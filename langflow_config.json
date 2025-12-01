@@ -1,0 +1,127 @@
+{
+  "name": "Campus Chatbot Flow",
+  "description": "LangFlow configuration for Campus AI Chatbot with RAG",
+  "version": "1.0",
+  "nodes": [
+    {
+      "id": "input",
+      "type": "ChatInput",
+      "data": {
+        "name": "User Query",
+        "description": "Student question about campus"
+      }
+    },
+    {
+      "id": "retriever",
+      "type": "VectorStoreRetriever",
+      "data": {
+        "name": "Knowledge Base",
+        "vector_store": "ChromaDB",
+        "collection_name": "campus_knowledge",
+        "top_k": 3,
+        "search_type": "similarity"
+      }
+    },
+    {
+      "id": "prompt",
+      "type": "PromptTemplate",
+      "data": {
+        "name": "System Prompt",
+        "template": "You are a helpful campus assistant for {campus_name}.\n\nContext from university documents:\n{context}\n\nStudent question: {query}\n\nProvide a helpful, accurate answer based on the context. If the information is not in the context, politely say so and suggest contacting the relevant department.\n\nAnswer:"
+      }
+    },
+    {
+      "id": "llm",
+      "type": "LLM",
+      "data": {
+        "name": "Language Model",
+        "provider": "ollama",
+        "model": "llama2",
+        "temperature": 0.7,
+        "max_tokens": 300
+      }
+    },
+    {
+      "id": "output",
+      "type": "ChatOutput",
+      "data": {
+        "name": "Bot Response"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "input",
+      "target": "retriever",
+      "label": "query"
+    },
+    {
+      "source": "retriever",
+      "target": "prompt",
+      "label": "context"
+    },
+    {
+      "source": "input",
+      "target": "prompt",
+      "label": "query"
+    },
+    {
+      "source": "prompt",
+      "target": "llm",
+      "label": "formatted_prompt"
+    },
+    {
+      "source": "llm",
+      "target": "output",
+      "label": "response"
+    }
+  ],
+  "configuration": {
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "chunk_size": 800,
+    "chunk_overlap": 150,
+    "vector_db": {
+      "type": "chromadb",
+      "persist_directory": "./data/chroma_db"
+    },
+    "llm_options": {
+      "ollama": {
+        "base_url": "http://localhost:11434",
+        "model": "llama2"
+      },
+      "huggingface": {
+        "model": "HuggingFaceH4/zephyr-7b-beta",
+        "api_key": "env:HUGGINGFACE_API_KEY"
+      },
+      "ibm_granite": {
+        "model_id": "ibm/granite-13b-chat-v2",
+        "api_key": "env:IBM_GRANITE_API_KEY",
+        "project_id": "env:IBM_PROJECT_ID"
+      }
+    }
+  },
+  "categories": {
+    "fees": {
+      "keywords": ["fee", "payment", "tuition", "scholarship", "cost"],
+      "department": "fees"
+    },
+    "exams": {
+      "keywords": ["exam", "test", "schedule", "result", "grade"],
+      "department": "examinations"
+    },
+    "hostel": {
+      "keywords": ["hostel", "accommodation", "room", "mess"],
+      "department": "hostel"
+    },
+    "library": {
+      "keywords": ["library", "book", "borrow", "journal"],
+      "department": "library"
+    }
+  },
+  "metadata": {
+    "created_by": "Campus AI Chatbot",
+    "purpose": "University administration support",
+    "supported_categories": ["fees", "exams", "hostel", "library", "general"],
+    "free_options": ["ollama", "huggingface"]
+  }
+}

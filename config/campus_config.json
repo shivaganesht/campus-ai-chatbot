@@ -1,0 +1,111 @@
+{
+  "campus_info": {
+    "name": "YOUR UNIVERSITY NAME HERE",
+    "short_name": "UNIV",
+    "tagline": "Excellence in Education",
+    "website": "https://www.youruniversity.edu",
+    "contact_email": "info@youruniversity.edu",
+    "contact_phone": "+1-XXX-XXX-XXXX",
+    "address": "123 University Avenue, City, State, ZIP Code",
+    "established_year": "1960"
+  },
+  "branding": {
+    "primary_color": "#1e3a8a",
+    "secondary_color": "#3b82f6",
+    "accent_color": "#f59e0b",
+    "text_color": "#1f2937",
+    "background_color": "#f9fafb",
+    "logo_path": "assets/logo.png",
+    "favicon_path": "assets/favicon.ico",
+    "background_image": "assets/campus_bg.jpg",
+    "font_family": "Inter, system-ui, -apple-system, sans-serif"
+  },
+  "chatbot_settings": {
+    "bot_name": "CampusBot",
+    "bot_avatar": "assets/bot_avatar.png",
+    "welcome_message": "👋 Hello! I'm your Campus AI Assistant. I can help you with:\n\n💰 Fee Structure\n📝 Exam Schedules\n🏠 Hostel Rules & Info\n📚 Library Services\n\nHow can I assist you today?",
+    "fallback_message": "I apologize, but I don't have specific information about that. Please contact the administration office for detailed assistance.",
+    "typing_speed": 30,
+    "max_message_length": 500,
+    "session_timeout_minutes": 30,
+    "show_timestamps": true,
+    "show_quick_actions": true,
+    "enable_feedback": true
+  },
+  "departments": {
+    "fees": {
+      "name": "Fee & Finance Office",
+      "contact": "fees@youruniversity.edu",
+      "phone": "+1-XXX-XXX-1001",
+      "location": "Admin Block, Room 101",
+      "hours": "Mon-Fri: 9:00 AM - 5:00 PM"
+    },
+    "examinations": {
+      "name": "Examination Cell",
+      "contact": "exams@youruniversity.edu",
+      "phone": "+1-XXX-XXX-1002",
+      "location": "Academic Block, Room 205",
+      "hours": "Mon-Fri: 9:30 AM - 4:30 PM"
+    },
+    "hostel": {
+      "name": "Hostel Administration",
+      "contact": "hostel@youruniversity.edu",
+      "phone": "+1-XXX-XXX-1003",
+      "location": "Hostel Office Building",
+      "hours": "Mon-Sun: 8:00 AM - 8:00 PM"
+    },
+    "library": {
+      "name": "Central Library",
+      "contact": "library@youruniversity.edu",
+      "phone": "+1-XXX-XXX-1004",
+      "location": "Library Building",
+      "hours": "Mon-Sat: 8:00 AM - 10:00 PM"
+    }
+  },
+  "quick_links": [
+    {
+      "title": "Student Portal",
+      "url": "https://portal.youruniversity.edu",
+      "icon": "🎓",
+      "category": "academic"
+    },
+    {
+      "title": "Fee Payment Gateway",
+      "url": "https://payments.youruniversity.edu",
+      "icon": "💳",
+      "category": "fees"
+    },
+    {
+      "title": "Academic Calendar",
+      "url": "https://calendar.youruniversity.edu",
+      "icon": "📅",
+      "category": "academic"
+    },
+    {
+      "title": "Library Portal",
+      "url": "https://library.youruniversity.edu",
+      "icon": "📚",
+      "category": "library"
+    },
+    {
+      "title": "Exam Results",
+      "url": "https://results.youruniversity.edu",
+      "icon": "📊",
+      "category": "exams"
+    }
+  ],
+  "social_media": {
+    "facebook": "https://facebook.com/youruniversity",
+    "twitter": "https://twitter.com/youruniversity",
+    "instagram": "https://instagram.com/youruniversity",
+    "linkedin": "https://linkedin.com/school/youruniversity",
+    "youtube": "https://youtube.com/youruniversity"
+  },
+  "customization": {
+    "allow_theme_change": true,
+    "allow_language_change": false,
+    "supported_languages": ["en"],
+    "date_format": "MM/DD/YYYY",
+    "time_format": "12h"
+  }
+}

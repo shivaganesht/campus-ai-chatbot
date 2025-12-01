@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Campus Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header -->
+        <header class="admin-header">
+            <h1>⚙️ Campus Chatbot - Admin Panel</h1>
+            <a href="/" class="back-link">← Back to Chatbot</a>
+        </header>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="customization">🎨 Customization</button>
+            <button class="tab-btn" data-tab="documents">📄 Documents</button>
+            <button class="tab-btn" data-tab="statistics">📊 Statistics</button>
+            <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div class="tab-content active" id="customization-tab">
+            <h2>🎨 Campus Customization</h2>
+            <p class="tab-description">Customize your campus chatbot branding and information</p>
+
+            <div class="section-grid">
+                <!-- Campus Info -->
+                <div class="section-card">
+                    <h3>🏛️ Campus Information</h3>
+                    <form id="campus-info-form">
+                        <div class="form-group">
+                            <label>University Name *</label>
+                            <input type="text" id="campus-name" value="{{ config.campus_info.name }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Short Name/Acronym *</label>
+                            <input type="text" id="campus-short-name" value="{{ config.campus_info.short_name }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tagline</label>
+                            <input type="text" id="campus-tagline" value="{{ config.campus_info.tagline }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input type="url" id="campus-website" value="{{ config.campus_info.website }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Email</label>
+                            <input type="email" id="campus-email" value="{{ config.campus_info.contact_email }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Phone</label>
+                            <input type="tel" id="campus-phone" value="{{ config.campus_info.contact_phone }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">💾 Save Campus Info</button>
+                    </form>
+                </div>
+
+                <!-- Branding -->
+                <div class="section-card">
+                    <h3>🎨 Branding & Colors</h3>
+                    <form id="branding-form">
+                        <div class="form-group">
+                            <label>Primary Color</label>
+                            <input type="color" id="primary-color" value="{{ config.branding.primary_color }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Secondary Color</label>
+                            <input type="color" id="secondary-color" value="{{ config.branding.secondary_color }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Accent Color</label>
+                            <input type="color" id="accent-color" value="{{ config.branding.accent_color }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">🎨 Apply Colors</button>
+                    </form>
+                </div>
+
+                <!-- Assets Upload -->
+                <div class="section-card">
+                    <h3>📁 Upload Assets</h3>
+                    
+                    <div class="upload-section">
+                        <label>🏛️ Campus Logo</label>
+                        <input type="file" id="logo-upload" accept="image/*">
+                        <button class="btn btn-secondary" onclick="uploadAsset('logo', 'logo-upload')">Upload Logo</button>
+                    </div>
+
+                    <div class="upload-section">
+                        <label>🤖 Bot Avatar</label>
+                        <input type="file" id="avatar-upload" accept="image/*">
+                        <button class="btn btn-secondary" onclick="uploadAsset('bot_avatar', 'avatar-upload')">Upload Avatar</button>
+                    </div>
+
+                    <div class="upload-section">
+                        <label>⭐ Favicon</label>
+                        <input type="file" id="favicon-upload" accept=".ico,.png">
+                        <button class="btn btn-secondary" onclick="uploadAsset('favicon', 'favicon-upload')">Upload Favicon</button>
+                    </div>
+                </div>
+
+                <!-- Chatbot Settings -->
+                <div class="section-card">
+                    <h3>🤖 Chatbot Settings</h3>
+                    <form id="chatbot-settings-form">
+                        <div class="form-group">
+                            <label>Bot Name</label>
+                            <input type="text" id="bot-name" value="{{ config.chatbot_settings.bot_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Welcome Message</label>
+                            <textarea id="welcome-message" rows="4">{{ config.chatbot_settings.welcome_message }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Fallback Message</label>
+                            <textarea id="fallback-message" rows="3">{{ config.chatbot_settings.fallback_message }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">💾 Save Settings</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents Tab -->
+        <div class="tab-content" id="documents-tab">
+            <h2>📄 University Handbook Documents</h2>
+            <p class="tab-description">Upload PDF handbooks to train the chatbot</p>
+
+            <div class="upload-card">
+                <h3>📤 Upload New Document</h3>
+                <form id="document-upload-form">
+                    <div class="form-group">
+                        <label>Select Category</label>
+                        <select id="doc-category">
+                            <option value="general">General</option>
+                            <option value="fees">Fee Structure</option>
+                            <option value="exams">Exam Schedule</option>
+                            <option value="hostel">Hostel Rules</option>
+                            <option value="library">Library Information</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Select PDF File</label>
+                        <input type="file" id="pdf-file" accept=".pdf" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">📤 Upload & Process</button>
+                </form>
+            </div>
+
+            <div class="documents-list">
+                <h3>📚 Uploaded Documents</h3>
+                <div id="documents-container">
+                    <p class="loading">Loading documents...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Tab -->
+        <div class="tab-content" id="statistics-tab">
+            <h2>📊 Statistics & Analytics</h2>
+            <div id="stats-container">
+                <p class="loading">Loading statistics...</p>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="tab-content" id="settings-tab">
+            <h2>⚙️ Advanced Settings</h2>
+            <p class="tab-description">Configure LLM providers and advanced options</p>
+
+            <div class="section-card">
+                <h3>🤖 LLM Provider Configuration</h3>
+                <div class="info-box">
+                    <h4>Current Provider: <span id="current-provider">Loading...</span></h4>
+                    <p>To change the LLM provider, edit the <code>.env</code> file:</p>
+                    <pre>LLM_PROVIDER=ollama  # Options: ollama, huggingface, ibm_granite, openai</pre>
+                </div>
+
+                <h4>🆓 FREE Options (Recommended):</h4>
+                <div class="provider-grid">
+                    <div class="provider-card">
+                        <h5>Ollama (Local - 100% FREE)</h5>
+                        <p>Run AI models locally on your computer</p>
+                        <ol>
+                            <li>Download from <a href="https://ollama.ai" target="_blank">ollama.ai</a></li>
+                            <li>Install and run: <code>ollama serve</code></li>
+                            <li>Pull a model: <code>ollama pull llama2</code></li>
+                            <li>Set in .env: <code>LLM_PROVIDER=ollama</code></li>
+                        </ol>
+                    </div>
+
+                    <div class="provider-card">
+                        <h5>Hugging Face (FREE with limits)</h5>
+                        <p>Use open-source models from Hugging Face</p>
+                        <ol>
+                            <li>Get API key from <a href="https://huggingface.co" target="_blank">huggingface.co</a></li>
+                            <li>Add to .env: <code>HUGGINGFACE_API_KEY=your_key</code></li>
+                            <li>Set: <code>LLM_PROVIDER=huggingface</code></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <h4>💳 Paid Options:</h4>
+                <div class="provider-grid">
+                    <div class="provider-card">
+                        <h5>IBM Granite</h5>
+                        <p>Enterprise-grade AI from IBM</p>
+                        <code>LLM_PROVIDER=ibm_granite</code>
+                    </div>
+
+                    <div class="provider-card">
+                        <h5>OpenAI</h5>
+                        <p>GPT models from OpenAI</p>
+                        <code>LLM_PROVIDER=openai</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>
