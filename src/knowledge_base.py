@@ -1,53 +1,30 @@
 """
-Knowledge Base - Vector Storage
-================================
-FREE vector database using ChromaDB
+Knowledge Base - Lightweight Storage for Vercel
+================================================
+Simple JSON-based storage (no heavy dependencies)
 """
 
 import os
 import json
+import re
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 
-try:
-    import chromadb
-    from chromadb.config import Settings
-    CHROMA_AVAILABLE = True
-except ImportError:
-    CHROMA_AVAILABLE = False
-
-try:
-    from sentence_transformers import SentenceTransformer
-    EMBEDDINGS_AVAILABLE = True
-except ImportError:
-    EMBEDDINGS_AVAILABLE = False
-
 
 class KnowledgeBase:
-    """Vector-based knowledge storage (100% FREE using ChromaDB)"""
+    """Lightweight knowledge storage for Vercel deployment"""
     
-    def __init__(self, persist_directory: str = 'data/chroma_db'):
+    def __init__(self, persist_directory: str = 'data/knowledge_base'):
         self.persist_directory = persist_directory
         os.makedirs(persist_directory, exist_ok=True)
         
         self.categories = ['fees', 'exams', 'hostel', 'library', 'general']
         self.simple_store: Dict[str, List[Dict]] = {}
         
-        # Initialize embedding model
-        self.embedding_model = self._init_embeddings()
+        # Load existing data
+        self._load_simple_store()
         
-        # Initialize ChromaDB
-        self.client = self._init_chromadb()
-        self.collections = {}
-        
-        if self.client:
-            for category in self.categories:
-                try:
-                    self.collections[category] = self.client.get_or_create_collection(
-                        name=f"campus_{category}"
-                    )
-                except:
-                    pass
+        print("✅ Knowledge Base initialized (JSON mode for Vercel)")
         
         # Load simple backup store
         self._load_simple_store()
