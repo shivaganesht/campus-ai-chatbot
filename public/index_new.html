@@ -139,9 +139,6 @@
         .chat-screen {
             display: none;
             height: 100vh;
-        }
-        
-        .chat-screen.active {
             display: grid;
             grid-template-columns: 280px 1fr;
         }
@@ -153,11 +150,6 @@
             display: flex;
             flex-direction: column;
             overflow-y: auto;
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            width: 280px;
         }
         
         .sidebar-header {
@@ -298,7 +290,6 @@
             display: flex;
             flex-direction: column;
             background: #ffffff;
-            margin-left: 280px;
         }
         
         .chat-header {
@@ -593,9 +584,7 @@
         
         function showChatScreen() {
             document.getElementById('loginScreen').style.display = 'none';
-            const chatScreen = document.getElementById('chatScreen');
-            chatScreen.style.display = 'block';
-            chatScreen.classList.add('active');
+            document.getElementById('chatScreen').style.display = 'grid';
             
             // Update profile
             const initials = currentStudent.name.split(' ').map(n => n[0]).join('');
