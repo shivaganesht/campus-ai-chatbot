@@ -1,7 +1,7 @@
 """
-Campus AI Chatbot - Main Application
-=====================================
-Free AI chatbot for campus administration using LangFlow + Local LLMs
+Campus AI Chatbot - Main Application (Vercel Optimized)
+========================================================
+Serverless-ready Flask app for Vercel deployment
 """
 
 import os
@@ -9,12 +9,7 @@ import json
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_cors import CORS
-from flask_socketio import SocketIO, emit
 from dotenv import load_dotenv
-
-from src.chatbot_engine import CampusChatbot
-from src.document_processor import DocumentProcessor
-from src.config_manager import ConfigManager
 
 # Load environment variables
 load_dotenv()
@@ -29,21 +24,36 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 # Enable CORS
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# Initialize SocketIO
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+# Initialize managers (with error handling for Vercel)
+config_manager = None
+chatbot = None
+doc_processor = None
 
-# Initialize managers
-config_manager = ConfigManager()
-chatbot = CampusChatbot(config_manager)
-doc_processor = DocumentProcessor(config_manager)
+def init_app():
+    """Initialize app components (lazy loading for Vercel)"""
+    global config_manager, chatbot, doc_processor
+    
+    if config_manager is None:
+        try:
+            from src.chatbot_engine import CampusChatbot
+            from src.document_processor import DocumentProcessor
+            from src.config_manager import ConfigManager
+            
+            config_manager = ConfigManager()
+            chatbot = CampusChatbot(config_manager)
+            doc_processor = DocumentProcessor(config_manager)
+            
+            print("✅ Campus AI Chatbot initialized")
+        except Exception as e:
+            print(f"⚠️ Initialization warning: {e}")
+            # Create minimal fallback
+            config_manager = type('obj', (object,), {
+                'get_config': lambda: {},
+                'get_value': lambda *args: 'Campus Chatbot'
+            })()
 
-print("\n" + "="*60)
-print("🎓 CAMPUS AI CHATBOT INITIALIZED")
-print("="*60)
-print(f"📍 Campus: {config_manager.get_value('campus_info', 'name')}")
-print(f"🤖 Bot Name: {config_manager.get_value('chatbot_settings', 'bot_name')}")
-print(f"🔧 LLM Provider: {os.getenv('LLM_PROVIDER', 'ollama')}")
-print("="*60 + "\n")
+# Initialize on first import
+init_app()
 
 
 # ==================== WEB ROUTES ====================
@@ -271,49 +281,16 @@ def get_stats():
         return jsonify({'error': str(e)}), 500
 
 
-# ==================== WEBSOCKET EVENTS ====================
+# ==================== HEALTH CHECK ====================
 
-@socketio.on('connect')
-def handle_connect():
-    """Handle WebSocket connection"""
-    emit('connected', {
-        'status': 'connected',
-        'bot_name': config_manager.get_value('chatbot_settings', 'bot_name'),
-        'welcome_message': config_manager.get_value('chatbot_settings', 'welcome_message')
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Health check endpoint for Vercel"""
+    return jsonify({
+        'status': 'healthy',
+        'llm_provider': os.getenv('LLM_PROVIDER', 'groq'),
+        'timestamp': datetime.now().isoformat()
     })
-    print(f"✅ Client connected: {request.sid}")
-
-
-@socketio.on('disconnect')
-def handle_disconnect():
-    """Handle WebSocket disconnection"""
-    print(f"❌ Client disconnected: {request.sid}")
-
-
-@socketio.on('message')
-def handle_message(data):
-    """Handle real-time chat messages"""
-    try:
-        user_message = data.get('message', '').strip()
-        session_id = data.get('session_id', request.sid)
-        
-        if not user_message:
-            emit('error', {'message': 'Empty message'})
-            return
-        
-        # Show typing indicator
-        emit('typing', {'status': True})
-        
-        # Get response
-        response = chatbot.get_response(user_message, session_id)
-        
-        # Send response
-        emit('typing', {'status': False})
-        emit('response', response)
-        
-    except Exception as e:
-        emit('error', {'message': str(e)})
-        print(f"WebSocket error: {e}")
 
 
 # ==================== ERROR HANDLERS ====================
@@ -338,10 +315,10 @@ if __name__ == '__main__':
     os.makedirs('config', exist_ok=True)
     
     # Check if LLM is available
-    llm_provider = os.getenv('LLM_PROVIDER', 'ollama')
+    llm_provider = os.getenv('LLM_PROVIDER', 'groq')
     print(f"\n🚀 Starting server with {llm_provider.upper()} provider...")
     print("📝 Access the chatbot at: http://localhost:5000")
     print("⚙️  Admin panel at: http://localhost:5000/admin\n")
     
-    # Run the application
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
+    # Run the application (standard Flask for local, works on Vercel)
+    app.run(host='0.0.0.0', port=5000, debug=True)
