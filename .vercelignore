@@ -1,0 +1,13 @@
+# Ignore the old app.py and other files
+app.py
+app_backup.py
+test_groq.py
+vercel_check.py
+src/
+data/
+*.md
+!README.md
+.env
+.git/
+__pycache__/
+*.pyc
